@@ -1,6 +1,7 @@
-import { App, Plugin, Notice, TAbstractFile, PluginSettingTab, Setting } from "obsidian";
+import { App, Plugin, Notice, TAbstractFile, PluginSettingTab, Setting, TFile } from "obsidian";
 import { basename, join } from 'path';
 
+type EmojiTitlerSettingsKey = "emoji1" | "emoji2" | "emoji3" | "emoji4" | "emoji5" | "emoji6" | "emoji7" | "emoji8" | "emoji9";
 interface EmojiTitlerSettings {
   emoji1: string;
   emoji2: string;
@@ -11,7 +12,6 @@ interface EmojiTitlerSettings {
   emoji7: string;
   emoji8: string;
   emoji9: string;
-  emoji0: string;
 }
 
 const DEFAULT_SETTINGS: EmojiTitlerSettings = {
@@ -22,9 +22,8 @@ const DEFAULT_SETTINGS: EmojiTitlerSettings = {
   emoji5: "📒",
   emoji6: "📙",
   emoji7: "📚", 
-  emoji8: "📌",
-  emoji9: "👀",
-  emoji0: "✅",
+  emoji8: "👀",
+  emoji9: "✅",
 };
 
 export default class EmojiTitlerPlugin extends Plugin {
@@ -34,13 +33,12 @@ export default class EmojiTitlerPlugin extends Plugin {
   async onload() {
     await this.loadSettings();
 
-    for (let i = 1; i <= 10; i++) {
-      i = i % 10;
+    for (let i = 1; i < 10; i++) {
       this.addCommand({
         id: `insrt-emoji${i}-title`,
         name: `insert emoji${i} in the title`,
         callback: async () => {
-          await this.editEmojiTitle(this.settings[`emoji${i}`] || this.emojis[i - 1]);
+          await this.editEmojiTitle(this.settings[`emoji${i}` as EmojiTitlerSettingsKey]);
         },
         hotkeys: [
           {
@@ -73,18 +71,13 @@ export default class EmojiTitlerPlugin extends Plugin {
   }
 
   async editEmojiTitle(emoji: string) {
-    const activeLeaf = this.app.workspace.activeLeaf;
-    if (!activeLeaf) {
+    const file = this.app.workspace.getActiveFile();
+    if (!(file instanceof TFile)) {
       return;
     }
 
-    const file = activeLeaf.view.file;
-    if (!(file instanceof TAbstractFile)) {
-      return;
-    }
-
-    const oldPath = file.path;
-    const ext = file.extension;
+    const oldPath = file?.path!;
+    const ext = file?.extension!;
     let basenameWithoutExt = basename(oldPath, `.${ext}`);
     
     const match = basenameWithoutExt.match(this.emojiRegex);
@@ -93,12 +86,6 @@ export default class EmojiTitlerPlugin extends Plugin {
     }
     const newPath = join(file.parent.path, `${emoji}${basenameWithoutExt}.${ext}`);
     await this.app.fileManager.renameFile(file, newPath);
-
-    // if (emoji == '') {
-    //   new Notice("Emoji deleted")
-    // } else {
-    //   new Notice(emoji + " titled")
-    // }
   }
 
   async saveSettings() {
@@ -124,22 +111,19 @@ class EmojiTitlerSettingTab extends PluginSettingTab {
   
 	  containerEl.createEl("h2", { text: "Emoji Titler Settings" });
   
-	  for (let i = 1; i <= 10; i++) {
-    i = i % 10;
+	  for (let i = 1; i < 10; i++) {
 		new Setting(containerEl)
 		  .setName(`Emoji ${i}`)
 		  .setDesc(`set the emoji to be assigned to number ${i}`)
 		  .addText((text) =>
 			text
 			  .setPlaceholder(`Emoji ${i}`)
-			  .setValue(this.plugin.settings[`emoji${i}`])
+			  .setValue(this.plugin.settings[`emoji${i}` as EmojiTitlerSettingsKey])
 			  .onChange(async (value) => {
-				this.plugin.settings[`emoji${i}`] = value;
+				this.plugin.settings[`emoji${i}` as EmojiTitlerSettingsKey] = value;
 				await this.plugin.saveSettings();
 			  })
 		  );
 	  }
 	}
   }
-
-
