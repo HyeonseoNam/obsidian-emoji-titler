@@ -2,7 +2,7 @@
 	"id": "obsidian-emoji-titler",
 	"name": "Emoji Titler",
 	"version": "0.1.0",
-	"minAppVersion": "1.1.0",
+	"minAppVersion": "0.1.0",
 	"description": "This plugin is emoji titler to easily insert an emoji in the title using a keyboard shortcut.",
 	"author": "Hyeonseo Nam",
 	"authorUrl": "https://github.com/HyeonseoNam/obsidian-emoji-titler",
