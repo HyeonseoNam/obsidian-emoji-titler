@@ -1,16 +1,18 @@
 # Emoji Titler
 
-Emoji Titler is a plugin for [Obsidian](https://obsidian.md/) that allows you to quickly add an emoji to the title of the active note using keyboard shortcuts.
+Emoji Titler is a plugin for [Obsidian](https://obsidian.md/) that allows you to quickly add an emoji to the title of the active note using keyboard shortcuts. It can help you visually distinguish notes, for example, by indicating note's depth, or marking them as read among other things.
 
 ![Emoji Titler Demo Image](img/demo.gif)
 
 ## Usage
 
-Emoji Titler allows you to set up to 9 custom emojis, each of which can be assigned to a number key (1-9) on your keyboard. The default keyboard shortcut to add an emoji to the title is `Ctrl+Shift+[number key]`. The delete shortcut is `Ctrl+Shift+-`. If you want to modify the shortcuts, filter the Obsidian shortcut settings by `Emoji Titler` and modify the corresponding keybindings.
+1. First, in the plugin settings, click the "Specify shortcut" button and assign shortcuts manually.
 
-To assign specific emojis to number keys, navigate to the Emoji Titler plugin settings and assign the desired emojis to numbers 1 through 9. These assigned emojis can then be inserted into the beginning of the note title by pressing the corresponding shortcuts.
+![Setting Shortcuts](img/setting_shortcuts.gif)
 
-In addition to adding emojis, Emoji Titler also allows you to delete emojis from the beginning of the title. If the first character of the title is one of the assigned emojis, pressing `Ctrl+Shift+-` will remove that emoji from the title.
+2. Activate a note, and press the assigned shortcut to insert an emoji at the beginning of the title.
+
+3. If you insert a different emoji in a title that already has an emoji, the existing one will be replaced. It is also possible to simply delete the emoji.
 
 ## Installation
 
