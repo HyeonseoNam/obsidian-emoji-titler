@@ -1,5 +1,4 @@
-import { Plugin, PluginSettingTab, Setting, TFile } from "obsidian";
-import { basename, join } from 'path';
+import { App, Plugin, PluginSettingTab, Setting, TFile } from "obsidian";
 
 type EmojiTitlerSettingsKey = "emoji1" | "emoji2" | "emoji3" | "emoji4" | "emoji5" | "emoji6" | "emoji7" | "emoji8" | "emoji9" | "emoji10";
 interface EmojiTitlerSettings {
@@ -53,7 +52,7 @@ export default class EmojiTitlerPlugin extends Plugin {
       },
     });
     
-    this.addSettingTab(new EmojiTitlerSettingTab(this));
+    this.addSettingTab(new EmojiTitlerSettingTab(this.app, this));
   }
   
   async loadSettings() {
@@ -61,21 +60,19 @@ export default class EmojiTitlerPlugin extends Plugin {
   }
   
   async editEmojiTitle(emoji: string) {
-    const file = app.workspace.getActiveFile();
+    const file = this.app.workspace.getActiveFile();
     if (!(file instanceof TFile)) {
       return;
     }
-    
-    const oldPath = file?.path!;
-    const ext = file?.extension!;
-    let basenameWithoutExt = basename(oldPath, `.${ext}`);
-    
-    const match = basenameWithoutExt.match(this.emojiRegex);
+    let newName = file.basename
+    const match = newName.match(this.emojiRegex);
     if (match) {
-      basenameWithoutExt = basenameWithoutExt.replace(match[0], '');  
+      newName = newName.replace(match[0], '');  
     }
-    const newPath = join(file.parent.path, `${emoji}${basenameWithoutExt}.${ext}`);
-    await app.fileManager.renameFile(file, newPath);
+    newName = `${emoji}${newName}`
+    // @ts-ignore
+    const newPath = file.getNewPathAfterRename(newName)
+    await this.app.fileManager.renameFile(file, newPath);
   }
   
   async saveSettings() {
@@ -89,7 +86,7 @@ export default class EmojiTitlerPlugin extends Plugin {
 class EmojiTitlerSettingTab extends PluginSettingTab {
   plugin: EmojiTitlerPlugin;
   
-  constructor(plugin: EmojiTitlerPlugin) {
+  constructor(app: App, plugin: EmojiTitlerPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
