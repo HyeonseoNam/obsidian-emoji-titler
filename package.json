@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-emoji-titler",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"description": "This plugin is emoji titler to easily insert an emoji in the title using a keyboard shortcut.",
 	"main": "main.js",
 	"scripts": {
