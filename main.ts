@@ -53,7 +53,7 @@ export default class EmojiTitlerPlugin extends Plugin {
       },
     });
     
-    this.addSettingTab(new EmojiTitlerSettingTab(this.app, this));
+    this.addSettingTab(new EmojiTitlerSettingTab(this));
   }
   
   async loadSettings() {
@@ -61,7 +61,7 @@ export default class EmojiTitlerPlugin extends Plugin {
   }
   
   async editEmojiTitle(emoji: string) {
-    const file = this.app.workspace.getActiveFile();
+    const file = app.workspace.getActiveFile();
     if (!(file instanceof TFile)) {
       return;
     }
@@ -75,7 +75,7 @@ export default class EmojiTitlerPlugin extends Plugin {
       basenameWithoutExt = basenameWithoutExt.replace(match[0], '');  
     }
     const newPath = join(file.parent.path, `${emoji}${basenameWithoutExt}.${ext}`);
-    await this.app.fileManager.renameFile(file, newPath);
+    await app.fileManager.renameFile(file, newPath);
   }
   
   async saveSettings() {
@@ -89,7 +89,7 @@ export default class EmojiTitlerPlugin extends Plugin {
 class EmojiTitlerSettingTab extends PluginSettingTab {
   plugin: EmojiTitlerPlugin;
   
-  constructor(app: App, plugin: EmojiTitlerPlugin) {
+  constructor(plugin: EmojiTitlerPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -105,7 +105,9 @@ class EmojiTitlerSettingTab extends PluginSettingTab {
       cb.setButtonText("Specify shortcuts")
       .setCta()
       .onClick(() => {
+        // @ts-ignore
         app.setting.openTabById("hotkeys");
+        // @ts-ignore
         const tab = app.setting.activeTab;
         tab.searchInputEl.value = `Emoji Titler:`;
         tab.updateHotkeyVisibility();
