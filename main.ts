@@ -42,12 +42,6 @@ export default class EmojiTitlerPlugin extends Plugin {
         callback: async () => {
           await this.editEmojiTitle(this.settings[`emoji${i}` as EmojiTitlerSettingsKey]);
         },
-        hotkeys: [
-          {
-            modifiers: ['Ctrl', 'Shift'],
-            key: `${i}`,
-          },
-        ],
       });
     }
     
@@ -57,12 +51,6 @@ export default class EmojiTitlerPlugin extends Plugin {
       callback: async () => {
         await this.editEmojiTitle('');
       },
-      hotkeys: [
-        {
-          modifiers: ['Ctrl', 'Shift'],
-          key: '-',
-        },
-      ],
     });
     
     this.addSettingTab(new EmojiTitlerSettingTab(this.app, this));
@@ -111,7 +99,6 @@ class EmojiTitlerSettingTab extends PluginSettingTab {
     
     containerEl.empty();
     containerEl.createEl("h2", { text: "Emoji Titler Settings" });
-    // new Setting(containerEl);
     new Setting(this.containerEl)
     .setDesc("Note! This plugin does not have default shortcuts set to prevent shortcut conflicts. Assign shortcuts for each emoji directly. A good option is to use Ctrl(Cmd)+Shift in combination with a number to assign each emoji, and the - key for deletion.")
     .addButton((cb) => {
@@ -129,7 +116,6 @@ class EmojiTitlerSettingTab extends PluginSettingTab {
     for (let i = 1; i <= 10; i++) {
       new Setting(containerEl)
       .setName(`emoji ${i}`)
-      // .setDesc(`Specify emoji ${i} with shortcut`)
       .addText((text) =>
       text
       .setPlaceholder(`emoji${i}`)
