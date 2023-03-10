@@ -1,56 +1,43 @@
 import { App, Plugin, PluginSettingTab, Setting, TFile } from "obsidian";
 
-type EmojiTitlerSettingsKey = "emoji1" | "emoji2" | "emoji3" | "emoji4" | "emoji5" | "emoji6" | "emoji7" | "emoji8" | "emoji9" | "emoji10";
+
+interface EmojiCmd {
+  id: number;
+  tag: string;
+  emoji: string;
+}
+
 interface EmojiTitlerSettings {
-  emoji1: string;
-  emoji2: string;
-  emoji3: string;
-  emoji4: string;
-  emoji5: string;
-  emoji6: string;
-  emoji7: string;
-  emoji8: string;
-  emoji9: string;
-  emoji10: string;
+  emojis: EmojiCmd[];
+  tag_on: boolean;
 }
 
 const DEFAULT_SETTINGS: EmojiTitlerSettings = {
-  emoji1: "🌱", 
-  emoji2: "🌿",
-  emoji3: "🌳",
-  emoji4: "📝",
-  emoji5: "📒",
-  emoji6: "📙",
-  emoji7: "📚", 
-  emoji8: "💎",
-  emoji9: "👀",
-  emoji10: "✅",
+  emojis: [
+    {id: 0, tag: "seedling", emoji: "🌱"}, 
+    {id: 1, tag: "leaves", emoji: "🌿"}, 
+    {id: 2, tag: "tree", emoji: "🌳"}, 
+    {id: 3, tag: "done", emoji: "✅"}, 
+    {id: 4, tag: "", emoji: ""},
+  ],
+  tag_on: true
 };
 
 export default class EmojiTitlerPlugin extends Plugin {
   settings: EmojiTitlerSettings;
-  emojiRegex = /^\p{Emoji}/u;
   
   async onload() {
     await this.loadSettings();
     
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 0; i < this.settings.emojis.length; i++) {
       this.addCommand({
-        id: `insrt-emoji${i}-title`,
+        id: `insert-emoji_${i}`,
         name: `Insert emoji ${i} in title`,
         callback: async () => {
-          await this.editEmojiTitle(this.settings[`emoji${i}` as EmojiTitlerSettingsKey]);
+          await this.editEmojiTitle(this.settings.emojis[i-1]);
         },
       });
     }
-    
-    this.addCommand({
-      id: 'delete-emoji-title',
-      name: 'delete emoji from the title',
-      callback: async () => {
-        await this.editEmojiTitle('');
-      },
-    });
     
     this.addSettingTab(new EmojiTitlerSettingTab(this.app, this));
   }
@@ -59,13 +46,23 @@ export default class EmojiTitlerPlugin extends Plugin {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
   
-  async editEmojiTitle(emoji: string) {
+  async editEmojiTitle(input_emoji: EmojiCmd) {
     const file = this.app.workspace.getActiveFile();
     if (!(file instanceof TFile)) {
       return;
     }
-    let newName = file.basename
-    const match = newName.match(this.emojiRegex);
+
+    // check whether input emoji is in the title
+    let newName = file.basename!;
+    let emojiRegex = /^\p{Emoji}/u;
+    
+    
+    
+    for (let i = 0; i < this.settings.emojis.length; i++) {
+      if (String.fromCodePoint(newName.codePointAt(0)!) == emoji)
+    }
+    
+    const match = newName.match(emojiRegex);
     if (match) {
       newName = newName.replace(match[0], '');  
     }
@@ -73,6 +70,9 @@ export default class EmojiTitlerPlugin extends Plugin {
     // @ts-ignore
     const newPath = file.getNewPathAfterRename(newName)
     await this.app.fileManager.renameFile(file, newPath);
+
+    // check whether input tag is in the metadata
+
   }
   
   async saveSettings() {
