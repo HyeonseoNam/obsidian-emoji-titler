@@ -6,13 +6,13 @@ Emoji Titler is a plugin for [Obsidian](https://obsidian.md/) that allows you to
 
 ## Usage
 
-1. First, in the plugin settings, click the "Specify shortcut" button and assign shortcuts manually.
-
 ![Setting Shortcuts](img/setting_shortcuts.gif)
+
+1. First, increase (+ button) or decrease (- button) the number of emojis you want to use, and set the emojis you want to use.
 
 2. Activate a note, and press the assigned shortcut to insert an emoji at the beginning of the title.
 
-3. If you insert a different emoji in a title that already has an emoji, the existing one will be replaced. It is also possible to simply delete the emoji.
+3. If you insert a different emoji in a title that already has an emoji, the existing one will be replaced. It is also possible to delete using the same shortcut key.
 
 ## Installation
 
@@ -24,6 +24,7 @@ Alternatively, you can manually install the plugin by downloading the latest rel
 ## Support
 
 If you encounter any issues while using this plugin or have any suggestions for improvement, please feel free to submit an issue on the GitHub repository. Pull requests are also welcome.
+
 ## License
 
 MIT License
