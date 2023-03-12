@@ -1,6 +1,8 @@
 # Emoji Titler
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/hyeonseonam/obsidian-emoji-titler?style=for-the-badge) ![GitHub all releases](https://img.shields.io/github/downloads/hyeonseonam/obsidian-emoji-titler/total?style=for-the-badge)
 
 Emoji Titler is a plugin for [Obsidian](https://obsidian.md/) that allows you to quickly add an emoji to the title of the active note using keyboard shortcuts. It can help you visually distinguish notes, for example, by indicating note's depth, or marking them as read among other things.
+
 
 ![Emoji Titler Demo Image](img/demo.gif)
 
