@@ -74,11 +74,23 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.emojis[newIndex].emoji)
           .onChange(async (value) => {
             this.plugin.settings.emojis[newIndex].emoji = value;
+            this.editCommandName(newIndex);
             await this.plugin.saveSettings();
           })
         );
       // register on setting list
       this.EmojiSettings.push(setting);
+    }
+
+    editCommandName(index: number) {
+      const targetEmoji = this.plugin.settings.emojis[index];
+      const targetCommand = this.plugin.getInsertCmd(index);
+      let newName = targetCommand.name;
+      if (!newName.includes(this.plugin.manifest.name)) {
+        newName = `${this.plugin.manifest.name}: ${newName}`;
+      }
+      const targetCommandId = `${this.plugin.manifest.id}:${this.plugin.getInsertCmd(targetEmoji.id)['id']}`
+      this.plugin.app.commands.commands[targetCommandId].name = newName;
     }
   }
   

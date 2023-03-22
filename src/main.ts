@@ -41,7 +41,7 @@ export default class EmojiTitlerPlugin extends Plugin {
   getInsertCmd(index: number) {
     return {
       id: `insert-emoji-${index}`,
-      name: `Insert emoji ${index} in title`,
+      name: `Insert emoji ${index} (${this.settings.emojis[index].emoji}) in title`,
       callback: async () => {
         await this.editEmojiTitle(this.settings.emojis[index]);
       },
