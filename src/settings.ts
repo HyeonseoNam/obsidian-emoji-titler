@@ -31,7 +31,17 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
       });
       
       containerEl.createEl("h2", { text: "Specify Emojis" });
-  
+      // tag toggle
+      new Setting(containerEl)
+      .setName("Use tag on the frontmatter")
+      .addToggle((toggle) =>
+          toggle
+              .setValue(this.plugin.settings.tag_on)
+              .onChange(async (value) => {
+                this.plugin.settings.tag_on = value;
+                await this.plugin.saveSettings();
+              })
+      );
       // add button
       new Setting(this.containerEl) 
       .setDesc("Add new emoji setting / Delete the last one")

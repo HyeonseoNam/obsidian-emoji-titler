@@ -1,5 +1,6 @@
 import { Plugin, TFile } from "obsidian";
 import { EmojiTitlerSettingTab } from "src/settings";
+import { ViewManager } from "src/view-manager";
 
 interface EmojiCmd {
   id: number;
@@ -20,12 +21,13 @@ const DEFAULT_SETTINGS: EmojiTitlerSettings = {
     {id: 3, name: "done", emoji: "✅"}, 
     {id: 4, name: "", emoji: ""},
   ],
-  tag_on: true
+  tag_on: false
 };
 
 export default class EmojiTitlerPlugin extends Plugin {
   settings: EmojiTitlerSettings;
-  
+  viewManager = new ViewManager(this.app);
+
   async onload() {
     await this.loadSettings();
     for (let i = 0; i < this.settings.emojis.length; i++) {
