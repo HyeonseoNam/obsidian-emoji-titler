@@ -1,0 +1,11 @@
+.setting-item-child {
+    background-color: var(--background-secondary);
+    padding-left: 1em;
+    padding-right: 1em;
+    border-top: 0.5px solid var(--background-primary);
+}
+
+
+.narrow-input input {
+    width: 30%;
+}
