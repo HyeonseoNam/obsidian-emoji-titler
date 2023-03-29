@@ -3,7 +3,7 @@ import type EmojiTitlerPlugin from "./main";
 
 export class EmojiTitlerSettingTab extends PluginSettingTab {
     plugin: EmojiTitlerPlugin;
-    EmojiSettings: Setting[] = [];
+
     constructor(app: App, plugin: EmojiTitlerPlugin) {
       super(app, plugin);
       this.plugin = plugin;
@@ -31,8 +31,6 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
       });
       
       containerEl.createEl("h2", { text: "Specify Emojis" });
-
-
       
       // tag toggle
       new Setting(containerEl)
@@ -61,10 +59,7 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           })
         );
-
       }
-
-
 
       // add button
       new Setting(this.containerEl) 
@@ -77,40 +72,33 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
           this.plugin.settings.emojis.push({id: newIndex, name: "", emoji: ""});
           this.addEmojiSetting(newIndex);
           this.plugin.addCommand(this.plugin.getInsertCmd(newIndex));
+          this.display();
         });
       })
       // delete button
       .addButton((cb) => {
         cb.setIcon("minus")
         .onClick(() => {
-          const removedEmoji = this.plugin.settings.emojis.pop()!;
+          const removedEmoji = this.plugin.settings.emojis.pop();
           if (removedEmoji) {
-            const removedEmojiSet = this.EmojiSettings.pop()!;
-            this.containerEl.removeChild(removedEmojiSet.settingEl);
             this.plugin.app.commands.removeCommand(
-                `${this.plugin.manifest.id}:${this.plugin.getInsertCmd(removedEmoji.id)['id']}`
-          )}
+                `${this.plugin.manifest.id}:${this.plugin.getInsertCmd(removedEmoji.id, true)}`);
+            this.display();
+                
+          }
         });
       });
       
-
-      
-      
-
-
       // add emoji setting components
       for (let i = 0; i < this.plugin.settings.emojis.length; i++) {
         this.addEmojiSetting(i)
       }
-
-
-
-
     }
     
     addEmojiSetting(newIndex: number) {
       const setting = new Setting(this.containerEl)
         .setName(`emoji ${newIndex}`)
+        .setClass('setting-item-child')
         .setClass('narrow-input')
         .addText((text) =>
           text
@@ -134,8 +122,6 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
           })
         );
       }
-      // register on setting list
-      this.EmojiSettings.push(setting);
     }
 
     editCommandName(index: number) {
@@ -145,7 +131,7 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
       if (!newName.includes(this.plugin.manifest.name)) {
         newName = `${this.plugin.manifest.name}: ${newName}`;
       }
-      const targetCommandId = `${this.plugin.manifest.id}:${this.plugin.getInsertCmd(targetEmoji.id)['id']}`
+      const targetCommandId = `${this.plugin.manifest.id}:${this.plugin.getInsertCmd(targetEmoji.id, true)}`
       this.plugin.app.commands.commands[targetCommandId].name = newName;
     }
   }

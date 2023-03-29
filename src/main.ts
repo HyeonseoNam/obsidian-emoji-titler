@@ -42,7 +42,8 @@ export default class EmojiTitlerPlugin extends Plugin {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
   
-  getInsertCmd(index: number) {
+  getInsertCmd(index: number, id_only?: boolean) {
+    if (id_only) return `insert-emoji-${index}`;
     return {
       id: `insert-emoji-${index}`,
       name: `Insert emoji ${index} (${this.settings.emojis[index].emoji}) in title`,
