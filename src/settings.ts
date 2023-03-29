@@ -31,17 +31,41 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
       });
       
       containerEl.createEl("h2", { text: "Specify Emojis" });
+
+
+      
       // tag toggle
       new Setting(containerEl)
-      .setName("Use tag on the frontmatter")
+      .setName("Use tag together")
       .addToggle((toggle) =>
           toggle
               .setValue(this.plugin.settings.tag_on)
               .onChange(async (value) => {
                 this.plugin.settings.tag_on = value;
                 await this.plugin.saveSettings();
+                this.display();
               })
       );
+      // tag key setting
+      if (this.plugin.settings.tag_on) {
+        new Setting(this.containerEl)
+        .setName('key')
+        .setDesc('The tag corresponding to each emoji will be placed in the key of the FrontMatter.')
+        .setClass('setting-item-child')
+        .addText((text) =>
+          text
+          .setPlaceholder('key')
+          .setValue(this.plugin.settings.tag_key)
+          .onChange(async (value) => {
+            this.plugin.settings.tag_key = value;
+            await this.plugin.saveSettings();
+          })
+        );
+
+      }
+
+
+
       // add button
       new Setting(this.containerEl) 
       .setDesc("Add new emoji setting / Delete the last one")
@@ -69,15 +93,25 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
         });
       });
       
+
+      
+      
+
+
       // add emoji setting components
       for (let i = 0; i < this.plugin.settings.emojis.length; i++) {
         this.addEmojiSetting(i)
       }
+
+
+
+
     }
     
     addEmojiSetting(newIndex: number) {
       const setting = new Setting(this.containerEl)
         .setName(`emoji ${newIndex}`)
+        .setClass('narrow-input')
         .addText((text) =>
           text
           .setPlaceholder(`emoji ${newIndex}`)
@@ -87,7 +121,19 @@ export class EmojiTitlerSettingTab extends PluginSettingTab {
             this.editCommandName(newIndex);
             await this.plugin.saveSettings();
           })
+        )
+      //
+      if (this.plugin.settings.tag_on) {
+        setting.addText((text) =>
+          text
+          .setPlaceholder(`tag`)
+          .setValue(this.plugin.settings.emojis[newIndex].name)
+          .onChange(async (value) => {
+            this.plugin.settings.emojis[newIndex].name = value;
+            await this.plugin.saveSettings();
+          })
         );
+      }
       // register on setting list
       this.EmojiSettings.push(setting);
     }

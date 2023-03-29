@@ -11,6 +11,7 @@ interface EmojiCmd {
 interface EmojiTitlerSettings {
   emojis: EmojiCmd[];
   tag_on: boolean;
+  tag_key: string;
 }
 
 const DEFAULT_SETTINGS: EmojiTitlerSettings = {
@@ -21,7 +22,8 @@ const DEFAULT_SETTINGS: EmojiTitlerSettings = {
     {id: 3, name: "done", emoji: "✅"}, 
     {id: 4, name: "", emoji: ""},
   ],
-  tag_on: false
+  tag_on: false,
+  tag_key: 'status'
 };
 
 export default class EmojiTitlerPlugin extends Plugin {

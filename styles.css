@@ -6,6 +6,9 @@
 }
 
 
-.narrow-input input {
+.narrow-input input:nth-child(1) {
+    width: 20%;
+}
+.narrow-input input:nth-child(2) {
     width: 30%;
 }
